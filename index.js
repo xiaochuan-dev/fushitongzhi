@@ -33,5 +33,6 @@ if (!fs.existsSync(outputDir)) {
             fullPage: true // 截取整个页面
         });
         console.log(`错误页面截图已保存: ${screenshotPath}`);
+        await browser.close();
     }
 })();
