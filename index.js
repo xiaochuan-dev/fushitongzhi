@@ -21,8 +21,15 @@ if (!fs.existsSync(outputDir)) {
     const url = 'https://cs.scu.edu.cn/index/xytz.htm';
 
     try {
-        await page.goto(url);
-        await page.waitForSelector(".content");
+
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+
+        await page.goto(url, {
+            waitUntil: 'networkidle0',
+            timeout: 60000
+        });
+
+        await page.waitForSelector(".content", { timeout: 10000 });
 
         await browser.close();
     } catch {
