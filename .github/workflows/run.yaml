@@ -1,0 +1,22 @@
+name: Job
+permissions: write-all
+on:
+  # schedule:
+  #   - cron: '0 * * * *'
+  push:
+  workflow_dispatch:
+
+jobs:
+  run-daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24.x'
+      - run: npm install
+      - run: node index.js
+      
