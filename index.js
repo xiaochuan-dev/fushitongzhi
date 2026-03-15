@@ -5,7 +5,12 @@ const path = require("path");
 
 puppeteer.use(StealthPlugin());
 
-;(async () => {
+const outputDir = "room_prices";
+if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+}
+
+; (async () => {
     const browser = await puppeteer.launch({
         channel: "chrome",
         // headless: false
@@ -14,8 +19,19 @@ puppeteer.use(StealthPlugin());
 
 
     const url = 'https://cs.scu.edu.cn/index/xytz.htm';
-    await page.goto(url);
-    await page.waitForSelector(".content");
 
-    await browser.close();
+    try {
+        await page.goto(url);
+        await page.waitForSelector(".content");
+
+        await browser.close();
+    } catch {
+        const timestamp = new Date().getTime();
+        const screenshotPath = path.join(__dirname, `error-${timestamp}.png`);
+        await page.screenshot({
+            path: screenshotPath,
+            fullPage: true // 截取整个页面
+        });
+        console.log(`错误页面截图已保存: ${screenshotPath}`);
+    }
 })();
