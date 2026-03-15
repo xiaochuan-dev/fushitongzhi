@@ -22,6 +22,15 @@ if (!fs.existsSync(outputDir)) {
 
     try {
 
+        await page.setViewport({
+            width: 1200,
+            height: 800,
+            deviceScaleFactor: 1,
+            hasTouch: false,
+            isLandscape: false,
+            isMobile: false
+        });
+        
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
         // 添加额外的stealth技巧
