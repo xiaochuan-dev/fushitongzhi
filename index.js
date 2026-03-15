@@ -30,12 +30,12 @@ if (!fs.existsSync(outputDir)) {
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined,
             });
-
+            
             // 覆盖plugins
             Object.defineProperty(navigator, 'plugins', {
                 get: () => [1, 2, 3, 4, 5],
             });
-
+            
             // 覆盖languages
             Object.defineProperty(navigator, 'languages', {
                 get: () => ['zh-CN', 'zh', 'en'],
@@ -43,9 +43,9 @@ if (!fs.existsSync(outputDir)) {
         });
 
 
-        // 监听控制台消息
+                // 监听控制台消息
         page.on('console', msg => console.log('浏览器控制台:', msg.text()));
-
+        
         // 监听请求失败
         page.on('requestfailed', request => {
             console.log('请求失败:', request.url(), request.failure().errorText);
@@ -56,22 +56,24 @@ if (!fs.existsSync(outputDir)) {
             if (response.status() >= 400) {
                 console.log('错误响应:', response.url(), response.status());
             }
-            await page.goto(url, {
-                waitUntil: 'networkidle0',
-                timeout: 60000
-            });
+        });
 
-            await page.waitForSelector(".content", { timeout: 10000 });
+        await page.goto(url, {
+            waitUntil: 'networkidle0',
+            timeout: 60000
+        });
 
-            await browser.close();
-        } catch {
-            const timestamp = new Date().getTime();
-            const screenshotPath = path.join(__dirname, `error-${timestamp}.png`);
-            await page.screenshot({
-                path: screenshotPath,
-                fullPage: true // 截取整个页面
-            });
-            console.log(`错误页面截图已保存: ${screenshotPath}`);
-            await browser.close();
-        }
-    }) ();
+        await page.waitForSelector(".content", { timeout: 10000 });
+
+        await browser.close();
+    } catch {
+        const timestamp = new Date().getTime();
+        const screenshotPath = path.join(__dirname, `error-${timestamp}.png`);
+        await page.screenshot({
+            path: screenshotPath,
+            fullPage: true // 截取整个页面
+        });
+        console.log(`错误页面截图已保存: ${screenshotPath}`);
+        await browser.close();
+    }
+})();
